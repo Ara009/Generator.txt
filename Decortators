@@ -1,0 +1,123 @@
+Assigning function to variables
+def one_plus(number):
+    return number + 1
+
+add_one = one_plus
+print(add_one(5))
+
+
+defining function inside other function
+def plus_one(number):
+    def add_one(number):
+        return number + 1
+
+    result = add_one(number)
+    return result
+print(plus_one(10))
+
+passing function as arguments to other function
+def plus_one(number):
+        return number + 1
+def function_call(function):
+    number_to_add = 5
+    return function(number_to_add)
+
+print(function_call(plus_one))
+
+function returning other function
+def hello_function():
+    def say_hi():
+        return 'hi'
+    return say_hi #hello_function function returns say_hu function itself
+hello = hello_function()
+print(hello())
+
+Creating a decorator
+def upper_decorator(function):
+    def wrapper(): #warp the original function
+        func = function()
+        make_uppercase = func.upper()
+        return make_uppercase
+    return wrapper
+
+def say_hi():
+    return 'hello world'
+
+decorator = upper_decorator(say_hi)
+print(decorator())
+
+or
+@upper_decorator
+def say_hi():
+    return 'hello world'
+print(say_hi())
+
+Applying multiple decorators to a single function
+import functools
+def split_string(function):
+    @functools.wraps(function)
+    def wrapper():
+        func = function()
+        splitted_string = func.split()
+        return splitted_string
+    return wrapper()
+def upper_decorator(function):
+    def wrapper():
+        func = function()
+        make_upper = func.upper()
+        return make_upper
+    return wrapper
+
+@split_string
+@upper_decorator
+def say_hi():
+    return 'hello world, how are you?'
+print(say_hi)
+
+#defining general purpose decorator
+
+def a_decorator_passing_arbitrary_arugments(Function_to_decorate):
+    def a_wrapper_acceptin_arbitary_aruguments(*args,**kwargs):
+        print('The postional arugments are',args)
+        print('The keyword arguments are',kwargs)
+        Function_to_decorate(*args)
+    return a_wrapper_acceptin_arbitary_aruguments
+
+@a_decorator_passing_arbitrary_arugments
+def function_with_no_argument():
+    print('No arguments here.')
+
+function_with_no_argument()
+
+#accepting arguments in decrator function
+
+def decorator_with_arguments(function):
+    def wrapper_accepting_arguments(arg1,arg2,):
+        print("My arguments are :{0},{1}".format(arg1,arg2))
+        function(arg1,arg2)
+        return function
+    return wrapper_accepting_arguments
+
+@decorator_with_arguments
+def cities(city_one,city_two):
+    print("Cities i love are {0} and {1}".format(city_one,city_two))
+cities("Tokyo","perth")
+
+def my_function(func):
+    def wrapper():
+        print(f"Running {func.__name__}")
+        func()
+        print("Completed")
+    return wrapper
+
+@my_function
+def do_that():
+    print("Do that")
+@my_function
+def do_this():
+    print("Do this")
+
+do_that()
+do_this()
+
+
